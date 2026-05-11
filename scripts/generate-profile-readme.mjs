@@ -3,8 +3,8 @@ import { writeFile } from "node:fs/promises";
 const USERNAME = "delusionofgrandeur";
 const DISPLAY_NAME = "spy";
 const PROFILE_REPO = "delusionofgrandeur/delusionofgrandeur";
-const DARK_IMAGE = "spy_terminal_dark.svg";
-const LIGHT_IMAGE = "spy_terminal_light.svg";
+const DARK_IMAGE = "spy_terminal_v2_dark.svg";
+const LIGHT_IMAGE = "spy_terminal_v2_light.svg";
 const DISCORD_USER_ID = "1477789276337999895";
 const PROFILE_TOKEN = process.env.PROFILE_GITHUB_TOKEN || "";
 
@@ -300,7 +300,7 @@ function svg(theme, stats, discord) {
   const commitLine = `${number(stats.commits)} | Followers: ${number(stats.followers)}`;
   const locLine = `${number(stats.lines)} (estimated)`;
   return `<?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" font-family="ConsolasFallback,Consolas,monospace" width="985px" height="650px" viewBox="0 0 985 650" font-size="15px" text-rendering="geometricPrecision">
+<svg xmlns="http://www.w3.org/2000/svg" font-family="ConsolasFallback,Consolas,monospace" width="985px" height="705px" viewBox="0 0 985 705" font-size="15px" text-rendering="geometricPrecision">
 <style>
 @font-face {
 src: local("Consolas"), local("Consolas Bold");
@@ -323,7 +323,7 @@ size-adjust: 109%;
 .discord-value {fill: ${theme.value};}
 text, tspan {white-space: pre;}
 </style>
-<rect width="985px" height="650px" fill="${theme.card}" rx="22"/>
+<rect width="985px" height="705px" fill="${theme.card}" rx="22"/>
 ${discordWidget(theme, discord)}
 <text x="390" y="40" class="card-text">
 <tspan x="390" y="40">spy@github ------------------------------------------------------</tspan>
@@ -345,12 +345,12 @@ ${line(446, "Interests.Security", staticProfile.interestSecurity)}
 ${line(470, "Interests.AI", staticProfile.interestAi)}
 ${line(494, "Now.Building", staticProfile.nowBuilding)}
 ${section(532, "Contact")}
-${line(556, "Email", staticProfile.email, { valueX: 500, max: 30 })}
-${line(556, "GitHub", staticProfile.github, { x: 705, valueX: 775, max: 22 })}
-${section(594, "GitHub Stats")}
-${line(618, "Repos", repoLine, { valueX: 500, max: 28 })}
-${line(618, "Commits", commitLine, { x: 705, valueX: 790, max: 18 })}
-${line(642, "Lines of Code on GitHub", locLine, { valueX: 610, max: 28 })}
+${line(556, "Email", staticProfile.email, { valueX: 610, max: 34 })}
+${line(580, "GitHub", staticProfile.github, { valueX: 610, max: 34 })}
+${section(618, "GitHub Stats")}
+${line(642, "Repos", repoLine, { valueX: 610, max: 34 })}
+${line(666, "Commits", commitLine, { valueX: 610, max: 34 })}
+${line(690, "Lines of Code on GitHub", locLine, { valueX: 610, max: 34 })}
 </text>
 </svg>`;
 }
