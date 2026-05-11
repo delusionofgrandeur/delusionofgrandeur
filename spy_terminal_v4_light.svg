@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" font-family="ConsolasFallback,Consolas,monospace" width="985px" height="720px" viewBox="0 0 985 720" font-size="15px" text-rendering="geometricPrecision">
+<svg xmlns="http://www.w3.org/2000/svg" font-family="ConsolasFallback,Consolas,monospace" width="985px" height="744px" viewBox="0 0 985 744" font-size="15px" text-rendering="geometricPrecision">
 <style>
 @font-face {
 src: local("Consolas"), local("Consolas Bold");
@@ -14,7 +14,7 @@ size-adjust: 109%;
 .card-text {fill: #24292f;}
 text, tspan {white-space: pre;}
 </style>
-<rect width="985px" height="720px" fill="#f6f8fa" rx="22"/>
+<rect width="985px" height="744px" fill="#f6f8fa" rx="22"/>
 <text x="80" y="42" class="card-text">
 <tspan x="80" y="42">spy@github ------------------------------------------------------------------------------------</tspan>
 <tspan x="80" y="72" class="cc">- </tspan><tspan class="key">OS</tspan><tspan class="cc">: .................................. </tspan><tspan x="420" y="72" class="value">Windows 11, Android</tspan>
@@ -37,9 +37,10 @@ text, tspan {white-space: pre;}
 <tspan x="80" y="536" class="cc">- Contact ------------------------------------------------------------------------------------</tspan>
 <tspan x="80" y="560" class="cc">- </tspan><tspan class="key">Email</tspan><tspan class="cc">: ............................... </tspan><tspan x="420" y="560" class="value">swedishviking20000@proton.me</tspan>
 <tspan x="80" y="584" class="cc">- </tspan><tspan class="key">GitHub</tspan><tspan class="cc">: .............................. </tspan><tspan x="420" y="584" class="value">delusionofgrandeur</tspan>
-<tspan x="80" y="622" class="cc">- GitHub Stats ------------------------------------------------------------------------------------</tspan>
-<tspan x="80" y="646" class="cc">- </tspan><tspan class="key">Repos</tspan><tspan class="cc">: ............................... </tspan><tspan x="420" y="646" class="value">16 {Contributed: 12} | Stars: 5</tspan>
-<tspan x="80" y="670" class="cc">- </tspan><tspan class="key">Commits</tspan><tspan class="cc">: ............................. </tspan><tspan x="420" y="670" class="value">690 | Followers: 2</tspan>
-<tspan x="80" y="694" class="cc">- </tspan><tspan class="key">Lines of Code on GitHub</tspan><tspan class="cc">: ............. </tspan><tspan x="420" y="694" class="value">272,687 (estimated)</tspan>
+<tspan x="80" y="608" class="cc">- </tspan><tspan class="key">Discord</tspan><tspan class="cc">: ............................. </tspan><tspan x="420" y="608" class="value">sipayisko</tspan>
+<tspan x="80" y="646" class="cc">- GitHub Stats ------------------------------------------------------------------------------------</tspan>
+<tspan x="80" y="670" class="cc">- </tspan><tspan class="key">Repos</tspan><tspan class="cc">: ............................... </tspan><tspan x="420" y="670" class="value">15 {Contributed: 12} | Stars: 5</tspan>
+<tspan x="80" y="694" class="cc">- </tspan><tspan class="key">Commits</tspan><tspan class="cc">: ............................. </tspan><tspan x="420" y="694" class="value">691 | Followers: 2</tspan>
+<tspan x="80" y="718" class="cc">- </tspan><tspan class="key">Lines of Code on GitHub</tspan><tspan class="cc">: ............. </tspan><tspan x="420" y="718" class="value">272,185 (estimated)</tspan>
 </text>
 </svg>

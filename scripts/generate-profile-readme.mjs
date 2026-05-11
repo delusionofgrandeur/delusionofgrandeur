@@ -43,6 +43,7 @@ const staticProfile = {
   nowBuilding: "secure CLIs, offline AI apps",
   email: "swedishviking20000@proton.me",
   github: USERNAME,
+  discord: "sipayisko",
 };
 
 const projectCopy = new Map([
@@ -215,7 +216,7 @@ function svg(theme, stats) {
   const locLine = `${number(stats.lines)} (estimated)`;
 
   return `<?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" font-family="ConsolasFallback,Consolas,monospace" width="985px" height="720px" viewBox="0 0 985 720" font-size="15px" text-rendering="geometricPrecision">
+<svg xmlns="http://www.w3.org/2000/svg" font-family="ConsolasFallback,Consolas,monospace" width="985px" height="744px" viewBox="0 0 985 744" font-size="15px" text-rendering="geometricPrecision">
 <style>
 @font-face {
 src: local("Consolas"), local("Consolas Bold");
@@ -230,7 +231,7 @@ size-adjust: 109%;
 .card-text {fill: ${theme.text};}
 text, tspan {white-space: pre;}
 </style>
-<rect width="985px" height="720px" fill="${theme.card}" rx="22"/>
+<rect width="985px" height="744px" fill="${theme.card}" rx="22"/>
 <text x="80" y="42" class="card-text">
 <tspan x="80" y="42">spy@github ------------------------------------------------------------------------------------</tspan>
 ${line(72, "OS", staticProfile.os)}
@@ -253,10 +254,11 @@ ${line(498, "Now.Building", staticProfile.nowBuilding)}
 ${section(536, "Contact")}
 ${line(560, "Email", staticProfile.email)}
 ${line(584, "GitHub", staticProfile.github)}
-${section(622, "GitHub Stats")}
-${line(646, "Repos", repoLine)}
-${line(670, "Commits", commitLine)}
-${line(694, "Lines of Code on GitHub", locLine)}
+${line(608, "Discord", staticProfile.discord)}
+${section(646, "GitHub Stats")}
+${line(670, "Repos", repoLine)}
+${line(694, "Commits", commitLine)}
+${line(718, "Lines of Code on GitHub", locLine)}
 </text>
 </svg>`;
 }
