@@ -1,5 +1,5 @@
 <a href="https://github.com/delusionofgrandeur">
-  <img alt="spy cyberpunk GitHub profile README" src="https://raw.githubusercontent.com/delusionofgrandeur/delusionofgrandeur/main/profile.svg">
+  <img alt="spy cyberpunk GitHub profile README" src="https://raw.githubusercontent.com/delusionofgrandeur/delusionofgrandeur/main/profile-card.svg">
 </a>
 
 <!--

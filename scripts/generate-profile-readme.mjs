@@ -3,6 +3,7 @@ import { writeFile } from "node:fs/promises";
 const USERNAME = "delusionofgrandeur";
 const DISPLAY_NAME = "spy";
 const PROFILE_REPO = "delusionofgrandeur/delusionofgrandeur";
+const PROFILE_IMAGE = "profile-card.svg";
 const DISCORD_USER_ID = process.env.DISCORD_USER_ID || "1477789276337999895";
 const GITHUB_TOKEN = process.env.GITHUB_TOKEN || "";
 
@@ -187,7 +188,7 @@ ${Array.from({ length: 9 }, (_, index) => `<rect x="18" y="${92 + index * 48}" w
 </svg>`;
 
   const readme = `<a href="https://github.com/${USERNAME}">
-  <img alt="${DISPLAY_NAME} cyberpunk GitHub profile README" src="https://raw.githubusercontent.com/${PROFILE_REPO}/main/profile.svg">
+  <img alt="${DISPLAY_NAME} cyberpunk GitHub profile README" src="https://raw.githubusercontent.com/${PROFILE_REPO}/main/${PROFILE_IMAGE}">
 </a>
 
 <!--
@@ -196,7 +197,7 @@ Discord status uses Lanyard with user ID ${DISCORD_USER_ID}.
 -->
 `;
 
-  await writeFile("profile.svg", svg.replace(/[ \t]+$/gm, ""), "utf8");
+  await writeFile(PROFILE_IMAGE, svg.replace(/[ \t]+$/gm, ""), "utf8");
   await writeFile("README.md", readme, "utf8");
 }
 
