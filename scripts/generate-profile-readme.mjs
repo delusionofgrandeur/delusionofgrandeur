@@ -3,8 +3,8 @@ import { writeFile } from "node:fs/promises";
 const USERNAME = "delusionofgrandeur";
 const DISPLAY_NAME = "spy";
 const PROFILE_REPO = "delusionofgrandeur/delusionofgrandeur";
-const DARK_IMAGE = "spy_dark.svg";
-const LIGHT_IMAGE = "spy_light.svg";
+const DARK_IMAGE = "spy_terminal_dark.svg";
+const LIGHT_IMAGE = "spy_terminal_light.svg";
 const DISCORD_USER_ID = "1477789276337999895";
 const PROFILE_TOKEN = process.env.PROFILE_GITHUB_TOKEN || "";
 

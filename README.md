@@ -1,7 +1,7 @@
 <a href="https://github.com/delusionofgrandeur">
   <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/delusionofgrandeur/delusionofgrandeur/main/spy_dark.svg">
-    <img alt="spy GitHub profile README" src="https://raw.githubusercontent.com/delusionofgrandeur/delusionofgrandeur/main/spy_light.svg">
+    <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/delusionofgrandeur/delusionofgrandeur/main/spy_terminal_dark.svg">
+    <img alt="spy GitHub profile README" src="https://raw.githubusercontent.com/delusionofgrandeur/delusionofgrandeur/main/spy_terminal_light.svg">
   </picture>
 </a>
 
