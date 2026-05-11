@@ -24,12 +24,13 @@ jobs:
         run: node scripts/generate-profile-readme.mjs
         env:
           PROFILE_GITHUB_TOKEN: ${{ secrets.PROFILE_GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ github.token }}
 
       - name: Commit generated profile
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add README.md spy_terminal_v2_dark.svg spy_terminal_v2_light.svg
+          git add README.md spy_terminal_v3_dark.svg spy_terminal_v3_light.svg
           if git diff --cached --quiet; then
             echo "No profile changes to commit."
           else

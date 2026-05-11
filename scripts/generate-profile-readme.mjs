@@ -3,10 +3,11 @@ import { writeFile } from "node:fs/promises";
 const USERNAME = "delusionofgrandeur";
 const DISPLAY_NAME = "spy";
 const PROFILE_REPO = "delusionofgrandeur/delusionofgrandeur";
-const DARK_IMAGE = "spy_terminal_v2_dark.svg";
-const LIGHT_IMAGE = "spy_terminal_v2_light.svg";
+const DARK_IMAGE = "spy_terminal_v3_dark.svg";
+const LIGHT_IMAGE = "spy_terminal_v3_light.svg";
 const DISCORD_USER_ID = "1477789276337999895";
 const PROFILE_TOKEN = process.env.PROFILE_GITHUB_TOKEN || "";
+const PUBLIC_TOKEN = PROFILE_TOKEN || process.env.GITHUB_TOKEN || "";
 
 const BIRTH_DATE = new Date(Date.UTC(2006, 11, 21));
 const FEATURED_REPOS = new Set(["coursera-scraper", "RepoSecAudit", "sors-whispercore"]);
@@ -43,7 +44,7 @@ const projectCopy = new Map([
   ["sors-whispercore", "offline Whisper app"],
 ]);
 
-async function githubJson(path, token = PROFILE_TOKEN) {
+async function githubJson(path, token = PUBLIC_TOKEN) {
   const headers = {
     Accept: "application/vnd.github+json",
     "User-Agent": `${USERNAME}-profile-readme`,
@@ -61,7 +62,7 @@ async function githubJson(path, token = PROFILE_TOKEN) {
   return response.json();
 }
 
-async function githubResponse(path, token = PROFILE_TOKEN) {
+async function githubResponse(path, token = PUBLIC_TOKEN) {
   const headers = {
     Accept: "application/vnd.github+json",
     "User-Agent": `${USERNAME}-profile-readme`,
@@ -262,9 +263,13 @@ function section(y, label, x = 390) {
 }
 
 function discordWidget(theme, discord) {
+  const isSpotify = discord.activity.startsWith("Spotify:");
+  const activityLabel = isSpotify ? "Spotify" : "Activity";
+  const activityValue = isSpotify ? discord.activity.replace(/^Spotify:\s*/, "") : discord.activity;
+  const nowValue = discord.custom || (isSpotify ? "listening" : discord.status);
   const avatar = discord.avatar
-    ? `<image href="${escapeXml(discord.avatar)}" x="126" y="96" width="132" height="132" clip-path="url(#avatarClip)"/>`
-    : `<text x="192" y="176" text-anchor="middle" class="avatar-fallback">SPY</text>`;
+    ? `<image href="${escapeXml(discord.avatar)}" x="128" y="126" width="128" height="128" clip-path="url(#avatarClip)"/>`
+    : `<text x="192" y="206" text-anchor="middle" class="avatar-fallback">SPY</text>`;
   const statusColor = {
     online: "#3fb950",
     idle: "#d29922",
@@ -275,23 +280,29 @@ function discordWidget(theme, discord) {
   return `
 <defs>
   <clipPath id="avatarClip">
-    <circle cx="192" cy="162" r="66"/>
+    <circle cx="192" cy="190" r="64"/>
   </clipPath>
 </defs>
 <g>
-  <rect x="55" y="75" width="285" height="430" rx="22" class="discord-card"/>
-  <circle cx="192" cy="162" r="70" class="avatar-ring"/>
+  <rect x="55" y="75" width="285" height="560" rx="24" class="discord-card"/>
+  <text x="80" y="110" class="discord-title">DISCORD PRESENCE</text>
+  <circle cx="305" cy="105" r="6" fill="${statusColor}"/>
+  <circle cx="192" cy="190" r="68" class="avatar-ring"/>
   ${avatar}
-  <circle cx="246" cy="215" r="15" fill="${statusColor}" stroke="${theme.card}" stroke-width="5"/>
-  <text x="198" y="272" text-anchor="middle" class="discord-name">${escapeXml(DISPLAY_NAME)}</text>
-  <text x="198" y="296" text-anchor="middle" class="discord-user">@${escapeXml(truncate(discord.username, 22))}</text>
-  <rect x="78" y="330" width="240" height="42" rx="10" class="presence-row"/>
-  <text x="95" y="357" class="discord-label">Status</text>
-  <text x="205" y="357" class="discord-value">${escapeXml(discord.status)}</text>
-  <rect x="78" y="383" width="240" height="42" rx="10" class="presence-row"/>
-  <text x="95" y="410" class="discord-label">Now</text>
-  <text x="205" y="410" class="discord-value">${escapeXml(truncate(discord.custom || discord.activity, 17))}</text>
-  <text x="198" y="467" text-anchor="middle" class="discord-small">${escapeXml(truncate(discord.activity, 31))}</text>
+  <circle cx="245" cy="241" r="15" fill="${statusColor}" stroke="${theme.card}" stroke-width="5"/>
+  <text x="198" y="288" text-anchor="middle" class="discord-name">${escapeXml(DISPLAY_NAME)}</text>
+  <text x="198" y="313" text-anchor="middle" class="discord-user">@${escapeXml(truncate(discord.username, 22))}</text>
+  <rect x="78" y="348" width="240" height="44" rx="12" class="presence-row"/>
+  <text x="95" y="376" class="discord-label">Status</text>
+  <text x="300" y="376" text-anchor="end" class="discord-value">${escapeXml(discord.status)}</text>
+  <rect x="78" y="406" width="240" height="44" rx="12" class="presence-row"/>
+  <text x="95" y="434" class="discord-label">Now</text>
+  <text x="300" y="434" text-anchor="end" class="discord-value">${escapeXml(truncate(nowValue, 20))}</text>
+  <rect x="78" y="470" width="240" height="96" rx="14" class="presence-row"/>
+  <text x="95" y="501" class="discord-label">${escapeXml(activityLabel)}</text>
+  <text x="95" y="529" class="discord-value">${escapeXml(truncate(activityValue, 26))}</text>
+  <text x="95" y="552" class="discord-small">${escapeXml(discord.ok ? "live via Lanyard" : "presence unavailable")}</text>
+  <text x="198" y="608" text-anchor="middle" class="discord-small">lanyard.cnrad.dev / live</text>
 </g>`;
 }
 
@@ -319,6 +330,7 @@ size-adjust: 109%;
 .avatar-fallback {fill: ${theme.key}; font-size: 44px; font-weight: 700;}
 .discord-name {fill: ${theme.text}; font-size: 22px; font-weight: 700;}
 .discord-user, .discord-small {fill: ${theme.cc};}
+.discord-title {fill: ${theme.cc}; font-size: 12px; font-weight: 700;}
 .discord-label {fill: ${theme.key}; font-weight: 700;}
 .discord-value {fill: ${theme.value};}
 text, tspan {white-space: pre;}
@@ -356,7 +368,7 @@ ${line(690, "Lines of Code on GitHub", locLine, { valueX: 610, max: 34 })}
 }
 
 async function build() {
-  const user = await githubJson(`/users/${USERNAME}`, "");
+  const user = await githubJson(`/users/${USERNAME}`);
   const [repos, discord] = await Promise.all([listRepos(), lanyardStatus()]);
   const stats = await profileStats(user, repos);
 
