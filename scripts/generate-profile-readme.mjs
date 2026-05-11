@@ -295,7 +295,7 @@ function svg(theme, stats, discord) {
   const commitLine = `${number(stats.commits)} | Followers: ${number(stats.followers)}`;
   const locLine = `${number(stats.lines)} (estimated)`;
   return `<?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" font-family="ConsolasFallback,Consolas,monospace" width="985px" height="590px" font-size="16px">
+<svg xmlns="http://www.w3.org/2000/svg" font-family="ConsolasFallback,Consolas,monospace" width="985px" height="615px" font-size="16px">
 <style>
 @font-face {
 src: local("Consolas"), local("Consolas Bold");
@@ -318,7 +318,7 @@ size-adjust: 109%;
 .discord-value {fill: ${theme.value};}
 text, tspan {white-space: pre;}
 </style>
-<rect width="985px" height="590px" fill="${theme.card}" rx="15"/>
+<rect width="985px" height="615px" fill="${theme.card}" rx="15"/>
 ${discordWidget(theme, discord)}
 <text x="390" y="30" class="card-text">
 <tspan x="390" y="30">spy@github --------------------------------------------------</tspan>
@@ -348,7 +348,7 @@ ${line(theme, 545, "Email", staticProfile.email, 26)}
 </text>
 <text x="390" y="575" class="card-text">
 <tspan x="390" y="575" class="key">Commits</tspan><tspan class="cc">: </tspan><tspan class="value">${escapeXml(commitLine)}</tspan>
-<tspan x="690" y="575" class="key">Lines</tspan><tspan class="cc">: </tspan><tspan class="value">${escapeXml(locLine)}</tspan>
+<tspan x="390" y="600" class="key">Lines of Code on GitHub</tspan><tspan class="cc">: .............. </tspan><tspan class="value">${escapeXml(locLine)}</tspan>
 </text>
 </svg>`;
 }
