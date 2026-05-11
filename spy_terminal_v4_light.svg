@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" font-family="ConsolasFallback,Consolas,monospace" width="985px" height="720px" viewBox="0 0 985 720" font-size="15px" text-rendering="geometricPrecision">
+<style>
+@font-face {
+src: local("Consolas"), local("Consolas Bold");
+font-family: "ConsolasFallback";
+font-display: swap;
+-webkit-size-adjust: 109%;
+size-adjust: 109%;
+}
+.key {fill: #953800;}
+.value {fill: #0a3069;}
+.cc {fill: #c2cfde;}
+.card-text {fill: #24292f;}
+text, tspan {white-space: pre;}
+</style>
+<rect width="985px" height="720px" fill="#f6f8fa" rx="22"/>
+<text x="80" y="42" class="card-text">
+<tspan x="80" y="42">spy@github ------------------------------------------------------------------------------------</tspan>
+<tspan x="80" y="72" class="cc">- </tspan><tspan class="key">OS</tspan><tspan class="cc">: .................................. </tspan><tspan x="420" y="72" class="value">Windows 11, Android</tspan>
+<tspan x="80" y="96" class="cc">- </tspan><tspan class="key">Uptime</tspan><tspan class="cc">: .............................. </tspan><tspan x="420" y="96" class="value">19 years, 4 months, 20 days</tspan>
+<tspan x="80" y="120" class="cc">- </tspan><tspan class="key">Host</tspan><tspan class="cc">: ................................ </tspan><tspan x="420" y="120" class="value">Sors AI</tspan>
+<tspan x="80" y="144" class="cc">- </tspan><tspan class="key">Kernel</tspan><tspan class="cc">: .............................. </tspan><tspan x="420" y="144" class="value">vibecoder / security automation</tspan>
+<tspan x="80" y="168" class="cc">- </tspan><tspan class="key">IDE</tspan><tspan class="cc">: ................................. </tspan><tspan x="420" y="168" class="value">Codex, Claude, VS Code, Cursor</tspan>
+<tspan x="80" y="206" class="cc">- Stack ------------------------------------------------------------------------------------</tspan>
+<tspan x="80" y="230" class="cc">- </tspan><tspan class="key">Languages.Programming</tspan><tspan class="cc">: ............... </tspan><tspan x="420" y="230" class="value">TypeScript, JavaScript, Python, QML</tspan>
+<tspan x="80" y="254" class="cc">- </tspan><tspan class="key">Stack.Frontend</tspan><tspan class="cc">: ...................... </tspan><tspan x="420" y="254" class="value">React Native, Expo, QML, CSS</tspan>
+<tspan x="80" y="278" class="cc">- </tspan><tspan class="key">Stack.Backend</tspan><tspan class="cc">: ....................... </tspan><tspan x="420" y="278" class="value">Node.js, Supabase, PostgreSQL</tspan>
+<tspan x="80" y="316" class="cc">- Projects ------------------------------------------------------------------------------------</tspan>
+<tspan x="80" y="340" class="cc">- </tspan><tspan class="key">coursera-scraper</tspan><tspan class="cc">: .................... </tspan><tspan x="420" y="340" class="value">course downloader CLI</tspan>
+<tspan x="80" y="364" class="cc">- </tspan><tspan class="key">RepoSecAudit</tspan><tspan class="cc">: ........................ </tspan><tspan x="420" y="364" class="value">repo security scanner</tspan>
+<tspan x="80" y="388" class="cc">- </tspan><tspan class="key">sors-whispercore</tspan><tspan class="cc">: .................... </tspan><tspan x="420" y="388" class="value">offline Whisper app</tspan>
+<tspan x="80" y="426" class="cc">- Interests ------------------------------------------------------------------------------------</tspan>
+<tspan x="80" y="450" class="cc">- </tspan><tspan class="key">Interests.Security</tspan><tspan class="cc">: .................. </tspan><tspan x="420" y="450" class="value">repo scanners, auth boundaries</tspan>
+<tspan x="80" y="474" class="cc">- </tspan><tspan class="key">Interests.AI</tspan><tspan class="cc">: ........................ </tspan><tspan x="420" y="474" class="value">agents, local transcription</tspan>
+<tspan x="80" y="498" class="cc">- </tspan><tspan class="key">Now.Building</tspan><tspan class="cc">: ........................ </tspan><tspan x="420" y="498" class="value">secure CLIs, offline AI apps</tspan>
+<tspan x="80" y="536" class="cc">- Contact ------------------------------------------------------------------------------------</tspan>
+<tspan x="80" y="560" class="cc">- </tspan><tspan class="key">Email</tspan><tspan class="cc">: ............................... </tspan><tspan x="420" y="560" class="value">swedishviking20000@proton.me</tspan>
+<tspan x="80" y="584" class="cc">- </tspan><tspan class="key">GitHub</tspan><tspan class="cc">: .............................. </tspan><tspan x="420" y="584" class="value">delusionofgrandeur</tspan>
+<tspan x="80" y="622" class="cc">- GitHub Stats ------------------------------------------------------------------------------------</tspan>
+<tspan x="80" y="646" class="cc">- </tspan><tspan class="key">Repos</tspan><tspan class="cc">: ............................... </tspan><tspan x="420" y="646" class="value">6 {Contributed: 4} | Stars: 4</tspan>
+<tspan x="80" y="670" class="cc">- </tspan><tspan class="key">Commits</tspan><tspan class="cc">: ............................. </tspan><tspan x="420" y="670" class="value">73 | Followers: 2</tspan>
+<tspan x="80" y="694" class="cc">- </tspan><tspan class="key">Lines of Code on GitHub</tspan><tspan class="cc">: ............. </tspan><tspan x="420" y="694" class="value">28,507 (estimated)</tspan>
+</text>
+</svg>
