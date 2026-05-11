@@ -1,4 +1,9 @@
-import { writeFile } from "node:fs/promises";
+import { execFile } from "node:child_process";
+import { access, readdir, writeFile } from "node:fs/promises";
+import { delimiter, join } from "node:path";
+import { promisify } from "node:util";
+
+const execFileAsync = promisify(execFile);
 
 const USERNAME = "delusionofgrandeur";
 const DISPLAY_NAME = "spy";
@@ -20,17 +25,11 @@ const FALLBACK_STATS = {
   deletions: 4634,
 };
 
-const LINE_DIVISORS = new Map([
-  ["TypeScript", 38],
-  ["JavaScript", 38],
-  ["Python", 42],
-  ["QML", 34],
-  ["PowerShell", 45],
-  ["Shell", 42],
-  ["CSS", 32],
-  ["HTML", 42],
-  ["SQL", 34],
-]);
+const CHURN_CONCURRENCY = Number(process.env.PROFILE_CHURN_CONCURRENCY || 3);
+const API_CHURN_CONCURRENCY = Number(process.env.PROFILE_API_CHURN_CONCURRENCY || 8);
+const REPO_SEARCH_ROOTS = (process.env.PROFILE_REPO_SEARCH_ROOTS || join(process.cwd(), ".."))
+  .split(delimiter)
+  .filter(Boolean);
 
 const staticProfile = {
   os: "Windows 11, Android",
@@ -120,83 +119,169 @@ async function commitCount(repo) {
   }
 }
 
-async function commitChurn(repo) {
+async function git(args, options = {}) {
+  const { stdout } = await execFileAsync("git", args, {
+    ...options,
+    maxBuffer: 1024 * 1024 * 64,
+  });
+  return stdout;
+}
+
+function normalizeRemote(value) {
+  return String(value || "")
+    .trim()
+    .replace(/^git@github\.com:/, "https://github.com/")
+    .replace(/^ssh:\/\/git@github\.com\//, "https://github.com/")
+    .replace(/^https:\/\/github\.com\//, "")
+    .replace(/\.git$/, "")
+    .toLowerCase();
+}
+
+async function pathExists(path) {
   try {
-    const response = await githubResponse(`/repos/${repo.full_name}/commits?author=${USERNAME}&per_page=100`);
-    const commits = await response.json();
-    const sampled = commits.slice(0, 30);
-    const details = await Promise.all(
-      sampled.map(async (commit) => {
-        try {
-          return await githubJson(`/repos/${repo.full_name}/commits/${commit.sha}`);
-        } catch {
-          return null;
-        }
-      }),
-    );
-
-    const totals = details.reduce(
-      (acc, commit) => {
-        acc.additions += commit?.stats?.additions || 0;
-        acc.deletions += commit?.stats?.deletions || 0;
-        return acc;
-      },
-      { additions: 0, deletions: 0 },
-    );
-
-    const sampleCount = Math.max(1, sampled.length);
-    const estimatedCommitCount = await commitCount(repo);
-    const scale = estimatedCommitCount / sampleCount;
-    return {
-      additions: Math.round(totals.additions * scale),
-      deletions: Math.round(totals.deletions * scale),
-    };
+    await access(path);
+    return true;
   } catch {
+    return false;
+  }
+}
+
+async function localRepoIndex() {
+  const index = new Map();
+
+  for (const root of REPO_SEARCH_ROOTS) {
+    if (!(await pathExists(root))) {
+      continue;
+    }
+
+    const entries = await readdir(root, { withFileTypes: true });
+    for (const entry of entries) {
+      if (!entry.isDirectory()) {
+        continue;
+      }
+
+      const candidate = join(root, entry.name);
+      if (!(await pathExists(join(candidate, ".git")))) {
+        continue;
+      }
+
+      try {
+        const remote = normalizeRemote(await git(["-C", candidate, "config", "--get", "remote.origin.url"]));
+        if (remote && !index.has(remote)) {
+          index.set(remote, candidate);
+        }
+      } catch {
+        // Ignore directories that look like git repos but do not have an origin remote.
+      }
+    }
+  }
+
+  return index;
+}
+
+function parseNumstat(output) {
+  return output.split(/\r?\n/).reduce(
+    (total, line) => {
+      const [additions, deletions] = line.trim().split(/\s+/);
+      const added = Number(additions);
+      const deleted = Number(deletions);
+      if (Number.isFinite(added)) {
+        total.additions += added;
+      }
+      if (Number.isFinite(deleted)) {
+        total.deletions += deleted;
+      }
+      return total;
+    },
+    { additions: 0, deletions: 0 },
+  );
+}
+
+async function localRepoChurn(repo, repoDir) {
+  const branchRef = `origin/${repo.default_branch || "main"}`;
+  try {
+    const output = await git(["-C", repoDir, "log", "--numstat", "--pretty=tformat:", branchRef]);
+    return parseNumstat(output);
+  } catch {
+    const output = await git(["-C", repoDir, "log", "--numstat", "--pretty=tformat:"]);
+    return parseNumstat(output);
+  }
+}
+
+async function repoApiChurn(repo) {
+  console.warn(`Using GitHub commit stats for ${repo.full_name}`);
+  const commits = [];
+  let page = 1;
+
+  while (page <= 10) {
+    const path = `/repos/${repo.full_name}/commits?sha=${repo.default_branch || "main"}&per_page=100&page=${page}`;
+    const batch = await githubJson(path);
+    commits.push(...batch.map((commit) => commit.sha));
+    if (batch.length < 100) {
+      break;
+    }
+    page += 1;
+  }
+
+  const churn = { additions: 0, deletions: 0 };
+  let nextCommit = 0;
+  const workerCount = Math.max(1, Math.min(API_CHURN_CONCURRENCY, commits.length));
+  await Promise.all(
+    Array.from({ length: workerCount }, async () => {
+      while (nextCommit < commits.length) {
+        const sha = commits[nextCommit];
+        nextCommit += 1;
+        const detail = await githubJson(`/repos/${repo.full_name}/commits/${sha}`);
+        churn.additions += Number(detail.stats?.additions || 0);
+        churn.deletions += Number(detail.stats?.deletions || 0);
+      }
+    }),
+  );
+
+  return churn;
+}
+
+async function repoChurn(repo, localRepos) {
+  const localRepo = localRepos.get(repo.full_name.toLowerCase());
+  if (localRepo) {
+    console.warn(`Using local git history for ${repo.full_name}`);
+    return localRepoChurn(repo, localRepo);
+  }
+
+  try {
+    return await repoApiChurn(repo);
+  } catch (error) {
+    console.warn(`Skipping churn for ${repo.full_name}: ${error.message}`);
     return { additions: 0, deletions: 0 };
   }
 }
 
-async function languageStats(repo) {
-  try {
-    return await githubJson(`/repos/${repo.full_name}/languages`);
-  } catch {
-    return {};
-  }
-}
-
-function estimateLines(languageMap) {
-  let lines = 0;
-  for (const [language, bytes] of Object.entries(languageMap)) {
-    const divisor = LINE_DIVISORS.get(language) || 40;
-    lines += Math.round(bytes / divisor);
-  }
-  return lines;
+async function realChurn(repos) {
+  const localRepos = await localRepoIndex();
+  const churn = { additions: 0, deletions: 0 };
+  let nextRepo = 0;
+  const workerCount = Math.max(1, Math.min(CHURN_CONCURRENCY, repos.length));
+  await Promise.all(
+    Array.from({ length: workerCount }, async () => {
+      while (nextRepo < repos.length) {
+        const repo = repos[nextRepo];
+        nextRepo += 1;
+        const repoTotals = await repoChurn(repo, localRepos);
+        churn.additions += repoTotals.additions;
+        churn.deletions += repoTotals.deletions;
+      }
+    }),
+  );
+  return churn;
 }
 
 async function profileStats() {
   try {
     const user = await githubJson(`/users/${USERNAME}`);
     const repos = await listRepos();
-    const repoStats = await Promise.all(
-      repos.map(async (repo) => {
-        const [commits, languages, churn] = await Promise.all([commitCount(repo), languageStats(repo), commitChurn(repo)]);
-        return { commits, languages, churn };
-      }),
-    );
-
-    const lines = repoStats.reduce((total, item) => total + estimateLines(item.languages), 0);
-    const churn = repoStats.reduce(
-      (total, item) => {
-        total.additions += item.churn.additions;
-        total.deletions += item.churn.deletions;
-        return total;
-      },
-      { additions: 0, deletions: 0 },
-    );
-    const fallbackChurn = {
-      additions: Math.round(lines * 1.23),
-      deletions: Math.round(lines * 0.18),
-    };
+    const repoStats = await Promise.all(repos.map(async (repo) => ({ commits: await commitCount(repo) })));
+    const churn = await realChurn(repos);
+    const netLines = Math.max(0, churn.additions - churn.deletions);
 
     return {
       repos: repos.length,
@@ -204,9 +289,9 @@ async function profileStats() {
       stars: repos.reduce((total, repo) => total + repo.stargazers_count, 0),
       commits: repoStats.reduce((total, item) => total + item.commits, 0),
       followers: user.followers,
-      lines,
-      additions: churn.additions || fallbackChurn.additions,
-      deletions: churn.deletions || fallbackChurn.deletions,
+      lines: netLines,
+      additions: churn.additions,
+      deletions: churn.deletions,
     };
   } catch (error) {
     console.warn(`Using fallback GitHub stats: ${error.message}`);
