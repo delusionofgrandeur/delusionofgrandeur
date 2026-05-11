@@ -25,22 +25,22 @@ const LINE_DIVISORS = new Map([
 const staticProfile = {
   os: "Windows 11, Android",
   host: "Sors AI",
-  kernel: "Vibecoder / security automation builder",
-  ide: "Codex, Claude, Antigravity, VS Code, Cursor",
-  programming: "TypeScript, JavaScript, Python, QML, PowerShell",
-  frontend: "React Native, Expo, QML, HTML, CSS",
-  backend: "Node.js, Supabase Edge, PostgreSQL, Python",
-  interestSecurity: "repo scanners, auth boundaries, launch gates",
-  interestAi: "agent workflows, local transcription, AI tools",
-  nowBuilding: "secure CLIs, offline AI apps, Android MVPs",
+  kernel: "vibecoder / security automation",
+  ide: "Codex, Claude, VS Code, Cursor",
+  programming: "TypeScript, JavaScript, Python, QML",
+  frontend: "React Native, Expo, QML, CSS",
+  backend: "Node.js, Supabase, PostgreSQL",
+  interestSecurity: "repo scanners, auth boundaries",
+  interestAi: "agents, local transcription",
+  nowBuilding: "secure CLIs, offline AI apps",
   email: "swedishviking20000@proton.me",
   github: USERNAME,
 };
 
 const projectCopy = new Map([
-  ["coursera-scraper", "TypeScript course downloader CLI"],
-  ["RepoSecAudit", "security scanner for repos"],
-  ["sors-whispercore", "offline Whisper desktop app"],
+  ["coursera-scraper", "course downloader CLI"],
+  ["RepoSecAudit", "repo security scanner"],
+  ["sors-whispercore", "offline Whisper app"],
 ]);
 
 async function githubJson(path, token = PROFILE_TOKEN) {
@@ -247,19 +247,24 @@ function truncate(value, length) {
   return text.length > length ? `${text.slice(0, length - 3)}...` : text;
 }
 
-function line(theme, y, key, value, dots = 28, x = 390) {
-  const dotText = ".".repeat(Math.max(2, dots - String(key).length));
-  return `<tspan x="${x}" y="${y}" class="cc">- </tspan><tspan class="key">${escapeXml(key)}</tspan><tspan class="cc">: ${dotText} </tspan><tspan class="value">${escapeXml(value)}</tspan>`;
+function line(y, key, value, options = {}) {
+  const x = options.x || 390;
+  const valueX = options.valueX || 680;
+  const max = options.max || 34;
+  const charWidth = options.charWidth || 8.35;
+  const fixedChars = 4 + String(key).length;
+  const dotCount = Math.max(3, Math.floor((valueX - x) / charWidth) - fixedChars);
+  return `<tspan x="${x}" y="${y}" class="cc">- </tspan><tspan class="key">${escapeXml(key)}</tspan><tspan class="cc">: ${".".repeat(dotCount)} </tspan><tspan x="${valueX}" y="${y}" class="value">${escapeXml(truncate(value, max))}</tspan>`;
 }
 
 function section(y, label, x = 390) {
-  return `<tspan x="${x}" y="${y}" class="cc">- ${escapeXml(label)} ---------------------------------------------------</tspan>`;
+  return `<tspan x="${x}" y="${y}" class="cc">- ${escapeXml(label)} ------------------------------------------------------</tspan>`;
 }
 
 function discordWidget(theme, discord) {
   const avatar = discord.avatar
-    ? `<image href="${escapeXml(discord.avatar)}" x="83" y="82" width="150" height="150" clip-path="url(#avatarClip)"/>`
-    : `<text x="158" y="166" text-anchor="middle" class="avatar-fallback">SPY</text>`;
+    ? `<image href="${escapeXml(discord.avatar)}" x="126" y="96" width="132" height="132" clip-path="url(#avatarClip)"/>`
+    : `<text x="192" y="176" text-anchor="middle" class="avatar-fallback">SPY</text>`;
   const statusColor = {
     online: "#3fb950",
     idle: "#d29922",
@@ -270,23 +275,23 @@ function discordWidget(theme, discord) {
   return `
 <defs>
   <clipPath id="avatarClip">
-    <circle cx="158" cy="157" r="75"/>
+    <circle cx="192" cy="162" r="66"/>
   </clipPath>
 </defs>
 <g>
-  <rect x="55" y="62" width="286" height="380" rx="18" class="discord-card"/>
-  <circle cx="158" cy="157" r="79" class="avatar-ring"/>
+  <rect x="55" y="75" width="285" height="430" rx="22" class="discord-card"/>
+  <circle cx="192" cy="162" r="70" class="avatar-ring"/>
   ${avatar}
-  <circle cx="216" cy="214" r="16" fill="${statusColor}" stroke="${theme.card}" stroke-width="5"/>
-  <text x="198" y="266" text-anchor="middle" class="discord-name">${escapeXml(truncate(discord.name, 22))}</text>
-  <text x="198" y="291" text-anchor="middle" class="discord-user">@${escapeXml(truncate(discord.username, 24))}</text>
-  <rect x="78" y="318" width="240" height="42" rx="8" class="presence-row"/>
-  <text x="95" y="345" class="discord-label">Status</text>
-  <text x="198" y="345" class="discord-value">${escapeXml(discord.status)}</text>
-  <rect x="78" y="371" width="240" height="42" rx="8" class="presence-row"/>
-  <text x="95" y="398" class="discord-label">Now</text>
-  <text x="198" y="398" class="discord-value">${escapeXml(truncate(discord.custom || discord.activity, 18))}</text>
-  <text x="198" y="455" text-anchor="middle" class="discord-small">${escapeXml(truncate(discord.activity, 32))}</text>
+  <circle cx="246" cy="215" r="15" fill="${statusColor}" stroke="${theme.card}" stroke-width="5"/>
+  <text x="198" y="272" text-anchor="middle" class="discord-name">${escapeXml(DISPLAY_NAME)}</text>
+  <text x="198" y="296" text-anchor="middle" class="discord-user">@${escapeXml(truncate(discord.username, 22))}</text>
+  <rect x="78" y="330" width="240" height="42" rx="10" class="presence-row"/>
+  <text x="95" y="357" class="discord-label">Status</text>
+  <text x="205" y="357" class="discord-value">${escapeXml(discord.status)}</text>
+  <rect x="78" y="383" width="240" height="42" rx="10" class="presence-row"/>
+  <text x="95" y="410" class="discord-label">Now</text>
+  <text x="205" y="410" class="discord-value">${escapeXml(truncate(discord.custom || discord.activity, 17))}</text>
+  <text x="198" y="467" text-anchor="middle" class="discord-small">${escapeXml(truncate(discord.activity, 31))}</text>
 </g>`;
 }
 
@@ -295,7 +300,7 @@ function svg(theme, stats, discord) {
   const commitLine = `${number(stats.commits)} | Followers: ${number(stats.followers)}`;
   const locLine = `${number(stats.lines)} (estimated)`;
   return `<?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" font-family="ConsolasFallback,Consolas,monospace" width="985px" height="615px" font-size="16px">
+<svg xmlns="http://www.w3.org/2000/svg" font-family="ConsolasFallback,Consolas,monospace" width="985px" height="650px" viewBox="0 0 985 650" font-size="15px" text-rendering="geometricPrecision">
 <style>
 @font-face {
 src: local("Consolas"), local("Consolas Bold");
@@ -308,7 +313,7 @@ size-adjust: 109%;
 .value {fill: ${theme.value};}
 .cc {fill: ${theme.cc};}
 .card-text {fill: ${theme.text};}
-.discord-card {fill: ${theme.discordCard};}
+.discord-card {fill: ${theme.discordCard}; opacity: .72;}
 .presence-row {fill: ${theme.presenceRow};}
 .avatar-ring {fill: none; stroke: ${theme.value}; stroke-width: 2;}
 .avatar-fallback {fill: ${theme.key}; font-size: 44px; font-weight: 700;}
@@ -318,37 +323,34 @@ size-adjust: 109%;
 .discord-value {fill: ${theme.value};}
 text, tspan {white-space: pre;}
 </style>
-<rect width="985px" height="615px" fill="${theme.card}" rx="15"/>
+<rect width="985px" height="650px" fill="${theme.card}" rx="22"/>
 ${discordWidget(theme, discord)}
-<text x="390" y="30" class="card-text">
-<tspan x="390" y="30">spy@github --------------------------------------------------</tspan>
-${line(theme, 55, "OS", staticProfile.os)}
-${line(theme, 80, "Uptime", ageText(), 25)}
-${line(theme, 105, "Host", staticProfile.host)}
-${line(theme, 130, "Kernel", staticProfile.kernel, 19)}
-${line(theme, 155, "IDE", staticProfile.ide, 25)}
-${section(190, "Stack")}
-${line(theme, 215, "Languages.Programming", staticProfile.programming, 32)}
-${line(theme, 240, "Stack.Frontend", staticProfile.frontend, 28)}
-${line(theme, 265, "Stack.Backend", staticProfile.backend, 29)}
-${section(300, "Projects")}
-${line(theme, 325, "coursera-scraper", projectCopy.get("coursera-scraper"), 31)}
-${line(theme, 350, "RepoSecAudit", projectCopy.get("RepoSecAudit"), 27)}
-${line(theme, 375, "sors-whispercore", projectCopy.get("sors-whispercore"), 31)}
-${section(410, "Interests")}
-${line(theme, 435, "Interests.Security", staticProfile.interestSecurity, 31)}
-${line(theme, 460, "Interests.AI", staticProfile.interestAi, 26)}
-${line(theme, 485, "Now.Building", staticProfile.nowBuilding, 27)}
-${section(520, "Contact")}
-${line(theme, 545, "Email", staticProfile.email, 26)}
-</text>
-<text x="690" y="520" class="card-text">
-<tspan x="690" y="520" class="key">GitHub</tspan><tspan class="cc">: </tspan><tspan class="value">${escapeXml(staticProfile.github)}</tspan>
-<tspan x="690" y="545" class="key">Repos</tspan><tspan class="cc">: </tspan><tspan class="value">${escapeXml(repoLine)}</tspan>
-</text>
-<text x="390" y="575" class="card-text">
-<tspan x="390" y="575" class="key">Commits</tspan><tspan class="cc">: </tspan><tspan class="value">${escapeXml(commitLine)}</tspan>
-<tspan x="390" y="600" class="key">Lines of Code on GitHub</tspan><tspan class="cc">: .............. </tspan><tspan class="value">${escapeXml(locLine)}</tspan>
+<text x="390" y="40" class="card-text">
+<tspan x="390" y="40">spy@github ------------------------------------------------------</tspan>
+${line(68, "OS", staticProfile.os)}
+${line(92, "Uptime", ageText())}
+${line(116, "Host", staticProfile.host)}
+${line(140, "Kernel", staticProfile.kernel)}
+${line(164, "IDE", staticProfile.ide)}
+${section(202, "Stack")}
+${line(226, "Languages.Programming", staticProfile.programming)}
+${line(250, "Stack.Frontend", staticProfile.frontend)}
+${line(274, "Stack.Backend", staticProfile.backend)}
+${section(312, "Projects")}
+${line(336, "coursera-scraper", projectCopy.get("coursera-scraper"))}
+${line(360, "RepoSecAudit", projectCopy.get("RepoSecAudit"))}
+${line(384, "sors-whispercore", projectCopy.get("sors-whispercore"))}
+${section(422, "Interests")}
+${line(446, "Interests.Security", staticProfile.interestSecurity)}
+${line(470, "Interests.AI", staticProfile.interestAi)}
+${line(494, "Now.Building", staticProfile.nowBuilding)}
+${section(532, "Contact")}
+${line(556, "Email", staticProfile.email, { valueX: 500, max: 30 })}
+${line(556, "GitHub", staticProfile.github, { x: 705, valueX: 775, max: 22 })}
+${section(594, "GitHub Stats")}
+${line(618, "Repos", repoLine, { valueX: 500, max: 28 })}
+${line(618, "Commits", commitLine, { x: 705, valueX: 790, max: 18 })}
+${line(642, "Lines of Code on GitHub", locLine, { valueX: 610, max: 28 })}
 </text>
 </svg>`;
 }
