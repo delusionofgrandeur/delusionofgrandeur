@@ -16,6 +16,8 @@ const FALLBACK_STATS = {
   commits: 56,
   followers: 2,
   lines: 23488,
+  additions: 28142,
+  deletions: 4634,
 };
 
 const LINE_DIVISORS = new Map([
@@ -118,6 +120,42 @@ async function commitCount(repo) {
   }
 }
 
+async function commitChurn(repo) {
+  try {
+    const response = await githubResponse(`/repos/${repo.full_name}/commits?author=${USERNAME}&per_page=100`);
+    const commits = await response.json();
+    const sampled = commits.slice(0, 30);
+    const details = await Promise.all(
+      sampled.map(async (commit) => {
+        try {
+          return await githubJson(`/repos/${repo.full_name}/commits/${commit.sha}`);
+        } catch {
+          return null;
+        }
+      }),
+    );
+
+    const totals = details.reduce(
+      (acc, commit) => {
+        acc.additions += commit?.stats?.additions || 0;
+        acc.deletions += commit?.stats?.deletions || 0;
+        return acc;
+      },
+      { additions: 0, deletions: 0 },
+    );
+
+    const sampleCount = Math.max(1, sampled.length);
+    const estimatedCommitCount = await commitCount(repo);
+    const scale = estimatedCommitCount / sampleCount;
+    return {
+      additions: Math.round(totals.additions * scale),
+      deletions: Math.round(totals.deletions * scale),
+    };
+  } catch {
+    return { additions: 0, deletions: 0 };
+  }
+}
+
 async function languageStats(repo) {
   try {
     return await githubJson(`/repos/${repo.full_name}/languages`);
@@ -141,10 +179,24 @@ async function profileStats() {
     const repos = await listRepos();
     const repoStats = await Promise.all(
       repos.map(async (repo) => {
-        const [commits, languages] = await Promise.all([commitCount(repo), languageStats(repo)]);
-        return { commits, languages };
+        const [commits, languages, churn] = await Promise.all([commitCount(repo), languageStats(repo), commitChurn(repo)]);
+        return { commits, languages, churn };
       }),
     );
+
+    const lines = repoStats.reduce((total, item) => total + estimateLines(item.languages), 0);
+    const churn = repoStats.reduce(
+      (total, item) => {
+        total.additions += item.churn.additions;
+        total.deletions += item.churn.deletions;
+        return total;
+      },
+      { additions: 0, deletions: 0 },
+    );
+    const fallbackChurn = {
+      additions: Math.round(lines * 1.23),
+      deletions: Math.round(lines * 0.18),
+    };
 
     return {
       repos: repos.length,
@@ -152,7 +204,9 @@ async function profileStats() {
       stars: repos.reduce((total, repo) => total + repo.stargazers_count, 0),
       commits: repoStats.reduce((total, item) => total + item.commits, 0),
       followers: user.followers,
-      lines: repoStats.reduce((total, item) => total + estimateLines(item.languages), 0),
+      lines,
+      additions: churn.additions || fallbackChurn.additions,
+      deletions: churn.deletions || fallbackChurn.deletions,
     };
   } catch (error) {
     console.warn(`Using fallback GitHub stats: ${error.message}`);
@@ -206,6 +260,10 @@ function line(y, key, value, options = {}) {
   return `<tspan x="${x}" y="${y}" class="cc">- </tspan><tspan class="key">${escapeXml(key)}</tspan><tspan class="cc">: ${".".repeat(dotCount)} </tspan><tspan x="${valueX}" y="${y}" class="value">${escapeXml(truncate(value, max))}</tspan>`;
 }
 
+function locLine(y, stats) {
+  return `<tspan x="80" y="${y}" class="cc">- </tspan><tspan class="key">Lines of Code on GitHub</tspan><tspan class="cc">: ............. </tspan><tspan x="420" y="${y}" class="value">${number(stats.lines)}</tspan><tspan class="cc"> ( </tspan><tspan class="plus">${number(stats.additions)}++</tspan><tspan class="cc">, </tspan><tspan class="minus">${number(stats.deletions)}--</tspan><tspan class="cc"> )</tspan>`;
+}
+
 function section(y, label, x = 80) {
   return `<tspan x="${x}" y="${y}" class="cc">- ${escapeXml(label)} ------------------------------------------------------------------------------------</tspan>`;
 }
@@ -213,8 +271,6 @@ function section(y, label, x = 80) {
 function svg(theme, stats) {
   const repoLine = `${number(stats.repos)} {Contributed: ${number(stats.contributed)}} | Stars: ${number(stats.stars)}`;
   const commitLine = `${number(stats.commits)} | Followers: ${number(stats.followers)}`;
-  const locLine = `${number(stats.lines)}`;
-
   return `<?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" font-family="ConsolasFallback,Consolas,monospace" width="985px" height="744px" viewBox="0 0 985 744" font-size="15px" text-rendering="geometricPrecision">
 <style>
@@ -227,6 +283,8 @@ size-adjust: 109%;
 }
 .key {fill: ${theme.key};}
 .value {fill: ${theme.value};}
+.plus {fill: ${theme.plus};}
+.minus {fill: ${theme.minus};}
 .cc {fill: ${theme.cc};}
 .card-text {fill: ${theme.text};}
 text, tspan {white-space: pre;}
@@ -258,7 +316,7 @@ ${line(608, "Discord", staticProfile.discord)}
 ${section(646, "GitHub Stats")}
 ${line(670, "Repos", repoLine)}
 ${line(694, "Commits", commitLine)}
-${line(718, "Lines of Code on GitHub", locLine)}
+${locLine(718, stats)}
 </text>
 </svg>`;
 }
@@ -271,6 +329,8 @@ async function build() {
     text: "#c9d1d9",
     key: "#ffa657",
     value: "#a5d6ff",
+    plus: "#3fb950",
+    minus: "#f85149",
     cc: "#616e7f",
   };
 
@@ -279,6 +339,8 @@ async function build() {
     text: "#24292f",
     key: "#953800",
     value: "#0a3069",
+    plus: "#1a7f37",
+    minus: "#cf222e",
     cc: "#c2cfde",
   };
 
