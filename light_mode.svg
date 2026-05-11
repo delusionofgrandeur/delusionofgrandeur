@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" font-family="ConsolasFallback,Consolas,monospace" width="985px" height="500px" font-size="16px">
+<style>
+@font-face {
+  src: local("Consolas"), local("Consolas Bold");
+  font-family: "ConsolasFallback";
+  font-display: swap;
+  -webkit-size-adjust: 109%;
+  size-adjust: 109%;
+}
+.title {fill: #24292f; font-weight: 700;}
+.key {fill: #953800;}
+.value {fill: #0a3069;}
+.muted {fill: #57606a;}
+.line {fill: #d0d7de;}
+.ok {fill: #1a7f37;}
+.warn {fill: #9a6700;}
+.accent {fill: #0969da;}
+.red {fill: #cf222e;}
+text, tspan {white-space: pre;}
+</style>
+<rect width="985px" height="500px" fill="#f6f8fa" rx="15"/>
+<rect x="0" y="0" width="985px" height="42px" fill="#ffffff" rx="15"/>
+<circle cx="24" cy="21" r="6" fill="#cf222e"/>
+<circle cx="44" cy="21" r="6" fill="#9a6700"/>
+<circle cx="64" cy="21" r="6" fill="#1a7f37"/>
+<text x="90" y="27" class="muted">profile://delusionofgrandeur</text>
+
+<text x="28" y="78" class="title">spy@github</text>
+<text x="28" y="104" class="muted">------------------------------------------------------------</text>
+<text x="28" y="136"><tspan class="key">Handle</tspan><tspan class="muted"> .................... </tspan><tspan class="value">delusionofgrandeur</tspan></text>
+<text x="28" y="162"><tspan class="key">Focus</tspan><tspan class="muted"> ................. </tspan><tspan class="value">secure apps, automation, AI tools</tspan></text>
+<text x="28" y="188"><tspan class="key">Stack</tspan><tspan class="muted"> ................. </tspan><tspan class="value">TypeScript, JavaScript, Python</tspan></text>
+<text x="28" y="214"><tspan class="key">Mobile</tspan><tspan class="muted"> ................ </tspan><tspan class="value">React Native, Expo, Supabase</tspan></text>
+<text x="28" y="240"><tspan class="key">Mode</tspan><tspan class="muted"> .................. </tspan><tspan class="value">fail closed, verify, ship clean</tspan></text>
+
+<text x="28" y="286" class="title">public github</text>
+<text x="28" y="312"><tspan class="key">Repositories</tspan><tspan class="muted"> .............. </tspan><tspan class="value">6</tspan></text>
+<text x="28" y="338"><tspan class="key">Stars</tspan><tspan class="muted"> ..................... </tspan><tspan class="value">4</tspan></text>
+<text x="28" y="364"><tspan class="key">Followers</tspan><tspan class="muted"> ................. </tspan><tspan class="value">2</tspan></text>
+<text x="28" y="390"><tspan class="key">Joined</tspan><tspan class="muted"> .................... </tspan><tspan class="value">2025-04-17</tspan></text>
+
+<line x1="520" y1="76" x2="520" y2="424" stroke="#d0d7de"/>
+<text x="545" y="78" class="title">featured work</text>
+<text x="545" y="104" class="muted">------------------------------------------------</text>
+<text x="545" y="136"><tspan class="ok">oputhgym</tspan><tspan class="muted"> ............ </tspan><tspan class="value">fitness MVP and launch gates</tspan></text>
+<text x="545" y="162"><tspan class="ok">coursera-scraper</tspan><tspan class="muted"> .... </tspan><tspan class="value">TypeScript course CLI</tspan></text>
+<text x="545" y="188"><tspan class="ok">RepoSecAudit</tspan><tspan class="muted"> ........ </tspan><tspan class="value">security scanner MVP</tspan></text>
+<text x="545" y="214"><tspan class="ok">sors-whispercore</tspan><tspan class="muted"> ... </tspan><tspan class="value">offline Whisper desktop app</tspan></text>
+
+<text x="545" y="286" class="title">current lane</text>
+<text x="545" y="312"><tspan class="key">Building</tspan><tspan class="muted"> ........... </tspan><tspan class="value">apps that survive real users</tspan></text>
+<text x="545" y="338"><tspan class="key">Reviewing</tspan><tspan class="muted"> .......... </tspan><tspan class="value">auth, secrets, billing, rollback</tspan></text>
+<text x="545" y="364"><tspan class="key">Preference</tspan><tspan class="muted"> ........ </tspan><tspan class="value">evidence over vibes</tspan></text>
+<text x="545" y="390"><tspan class="key">Updated</tspan><tspan class="muted"> ........... </tspan><tspan class="value">2026-05-11</tspan></text>
+
+<rect x="28" y="440" width="929" height="34" fill="#ffffff" rx="8"/>
+<text x="48" y="463"><tspan class="accent">$</tspan><tspan class="muted"> ./run --scope profile --style terminal --art none</tspan><tspan class="ok">  ok</tspan></text>
+</svg>
