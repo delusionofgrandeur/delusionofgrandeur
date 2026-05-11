@@ -213,7 +213,7 @@ function section(y, label, x = 80) {
 function svg(theme, stats) {
   const repoLine = `${number(stats.repos)} {Contributed: ${number(stats.contributed)}} | Stars: ${number(stats.stars)}`;
   const commitLine = `${number(stats.commits)} | Followers: ${number(stats.followers)}`;
-  const locLine = `${number(stats.lines)} (estimated)`;
+  const locLine = `${number(stats.lines)}`;
 
   return `<?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" font-family="ConsolasFallback,Consolas,monospace" width="985px" height="744px" viewBox="0 0 985 744" font-size="15px" text-rendering="geometricPrecision">
