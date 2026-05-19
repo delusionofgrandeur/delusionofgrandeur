@@ -20,7 +20,7 @@ text, tspan {white-space: pre;}
 <text x="80" y="42" class="card-text">
 <tspan x="80" y="42">spy@github ------------------------------------------------------------------------------------</tspan>
 <tspan x="80" y="72" class="cc">- </tspan><tspan class="key">OS</tspan><tspan class="cc">: .................................. </tspan><tspan x="420" y="72" class="value">Windows 11, Android</tspan>
-<tspan x="80" y="96" class="cc">- </tspan><tspan class="key">Uptime</tspan><tspan class="cc">: .............................. </tspan><tspan x="420" y="96" class="value">19 years, 4 months, 27 days</tspan>
+<tspan x="80" y="96" class="cc">- </tspan><tspan class="key">Uptime</tspan><tspan class="cc">: .............................. </tspan><tspan x="420" y="96" class="value">19 years, 4 months, 28 days</tspan>
 <tspan x="80" y="120" class="cc">- </tspan><tspan class="key">Host</tspan><tspan class="cc">: ................................ </tspan><tspan x="420" y="120" class="value">Sors AI</tspan>
 <tspan x="80" y="144" class="cc">- </tspan><tspan class="key">Kernel</tspan><tspan class="cc">: .............................. </tspan><tspan x="420" y="144" class="value">vibecoder / security automation</tspan>
 <tspan x="80" y="168" class="cc">- </tspan><tspan class="key">IDE</tspan><tspan class="cc">: ................................. </tspan><tspan x="420" y="168" class="value">Codex, Claude, VS Code, Cursor</tspan>
